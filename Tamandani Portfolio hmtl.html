@@ -1,0 +1,143 @@
+<!--
+Portfolio Website for Tamandani
+Built with HTML and CSS only (frontend)
+Development Environment: VS Code
+Instructions and setup for backend and deployment included in documentation
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tamandani | Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Sidebar Navigation -->
+  <nav class="sidebar">
+    <h1 class="logo">Tamandani</h1>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About Me</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact Me</a></li>
+    </ul>
+  </nav>
+
+  <!-- Home Section -->
+  <section id="home" class="section home">
+    <div class="intro">
+      <h2>Hi, I'm Tamandani</h2>
+      <p>I am a passionate aspiring software engineer with a love for creating engaging user interfaces and solving real-world problems through code. My background in technology and creativity drives me to continuously improve and learn in the ever-evolving world of development.</p>
+      <img src="images/profile.jpg" alt="Tamandani working" class="profile-img" />
+      <div class="cta-row">
+        <a href="docs/Tamandani_CV.pdf" class="btn" download>Download Resume</a>
+        <div class="social-links">
+          <a href="https://github.com/username" target="_blank">GitHub</a>
+          <a href="https://linkedin.com/in/username" target="_blank">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Me Section -->
+  <section id="about" class="section about">
+    <h2>About Me</h2>
+    <p><strong>Name:</strong> Tamandani Mujuni</p>
+    <p><strong>Current Role:</strong> Software Engineering Student at XYZ University</p>
+    <p><strong>Education:</strong> BSc in Software Engineering, Makerere University (Year 2)</p>
+    <p><strong>Hobbies:</strong> Coding, Building Projects, Watching Football, and Playing Chess</p>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills" class="section skills">
+    <h2>Skills</h2>
+    <ul>
+      <li><strong>Programming Languages:</strong> HTML, CSS, Python (beginner)</li>
+      <li><strong>Tools:</strong> VS Code, Git, GitHub</li>
+      <li><strong>Database:</strong> Firebase (basic setup knowledge)</li>
+    </ul>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" class="section projects">
+    <h2>Projects</h2>
+    <div class="project-gallery">
+      <!-- Project 1 -->
+      <div class="project-card">
+        <img src="images/project1.png" alt="Project 1 Screenshot" />
+        <h3>Weather App</h3>
+        <p>Built a weather forecast web app using HTML/CSS and integrated OpenWeather API. Role: Frontend Developer. Tools: HTML, CSS, JavaScript.</p>
+        <a href="#">Read more</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Me Section -->
+  <section id="contact" class="section contact">
+    <h2>Contact Me</h2>
+    <p>Feel free to reach out. I typically respond within 24 hours.</p>
+    <form action="https://formspree.io/f/yourformid" method="POST">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required />
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="message">Message:</label>
+      <textarea id="message" name="message" required></textarea>
+
+      <button type="submit">Send Message</button>
+    </form>
+    <p>Email: tamandani@email.com</p>
+    <p>Location: Kampala, Uganda</p>
+  </section>
+
+  <!-- JS for animations or interactivity (optional) -->
+  <script src="script.js"></script>
+</body>
+</html>
+
+<!--
+======================
+Deployment Instructions
+======================
+
+1. GITHUB PAGES
+-----------------
+1. Create a GitHub repository
+2. Push your files to the repository (index.html, style.css, etc.)
+3. Go to Settings > Pages
+4. Choose Branch: "main", folder: "/root" or "/docs"
+5. Click "Save"
+6. GitHub will give you a public URL like https://username.github.io/repo-name
+
+2. NETLIFY
+----------
+1. Create a Netlify account
+2. Click "Add new site" > "Import an existing project"
+3. Connect to your GitHub and select the portfolio repository
+4. Set build command: (leave blank) and publish directory: "./"
+5. Click "Deploy Site"
+6. Netlify will give you a public link
+
+3. VERCEL
+---------
+1. Create a Vercel account
+2. Click "Add New Project"
+3. Connect GitHub and import your repository
+4. Select root directory and skip build settings (for static site)
+5. Click "Deploy"
+6. Vercel gives you a public URL
+
+4. RENDER
+---------
+1. Create a Render account
+2. Go to Dashboard > "New Static Site"
+3. Connect GitHub and choose your repo
+4. Set build command: (leave blank), and publish directory: "./"
+5. Click "Create Static Site"
+6. Render provides a public URL
+-->
