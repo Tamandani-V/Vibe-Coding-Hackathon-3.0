@@ -1,136 +1,855 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tamandani | Portfolio</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriPrice Sense - Smart Agricultural Market Intelligence</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c5530;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #2c5530;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            background: #2c5530;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            background: #1e3a21;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .main-content {
+            background: white;
+            margin: 2rem 0;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .section {
+            display: none;
+            padding: 2rem;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            color: #2c5530;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price-card {
+            background: linear-gradient(135deg, #2c5530, #4a7c59);
+            color: white;
+        }
+
+        .price-card h3 {
+            color: white;
+        }
+
+        .price-display {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .price-change {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .price-up {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .price-down {
+            background: #27ae60;
+            color: white;
+        }
+
+        .forecast-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .control-group label {
+            font-weight: 500;
+            color: #2c5530;
+        }
+
+        select, input {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #2c5530;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 1rem;
+        }
+
+        .trade-route {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .route-info {
+            flex: 1;
+        }
+
+        .route-efficiency {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .high-efficiency {
+            background: #27ae60;
+        }
+
+        .medium-efficiency {
+            background: #f39c12;
+        }
+
+        .low-efficiency {
+            background: #e74c3c;
+        }
+
+        .alert-banner {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mobile-menu {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu {
+                display: block;
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .forecast-controls {
+                flex-direction: column;
+            }
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 15px;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .card-padding {
+            padding: 1rem 0;
+        }
+    </style>
 </head>
 <body>
-  <!-- Sidebar Navigation -->
-  <nav class="sidebar">
-    <h1 class="logo">Tamandani</h1>
-    <ul class="nav-links">
-      <li><a href="#home">Home</a></li>
-      <li><a href="#about">About Me</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#contact">Contact Me</a></li>
-    </ul>
-  </nav>
+    <header>
+        <nav class="container">
+            <div class="logo">
+                🌾 AgriPrice Sense
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showSection('dashboard')" class="active">Dashboard</a></li>
+                <li><a href="#" onclick="showSection('forecasting')">Price Forecasting</a></li>
+                <li><a href="#" onclick="showSection('analytics')">Market Analytics</a></li>
+                <li><a href="#" onclick="showSection('trade')">Trade Optimization</a></li>
+                <li><a href="#" onclick="showSection('about')">About</a></li>
+            </ul>
+            <button class="mobile-menu">☰</button>
+        </nav>
+    </header>
 
-  <!-- Home Section -->
-  <section id="home" class="section home">
-    <div class="intro">
-      <h2>Hi, I'm Tamandani</h2>
-      <p>I am a passionate aspiring software engineer with a love for creating engaging user interfaces and solving real-world problems through code. My background in technology and creativity drives me to continuously improve and learn in the ever-evolving world of development.</p>
-      <img src="images/profile.jpg" alt="Tamandani working" class="profile-img" />
-      <div class="cta-row">
-        <a href="docs/Tamandani_CV.pdf" class="btn" download>Download Resume</a>
-        <div class="social-links">
-          <a href="https://github.com/username" target="_blank">GitHub</a>
-          <a href="https://linkedin.com/in/username" target="_blank">LinkedIn</a>
+    <section class="hero">
+        <div class="container">
+            <h1>Smart Agricultural Market Intelligence</h1>
+            <p>Empowering farmers with data-driven insights for fair trade and food security across Sub-Saharan Africa</p>
+            <a href="#" onclick="showSection('dashboard')" class="cta-button">Explore Dashboard</a>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- About Me Section -->
-  <section id="about" class="section about">
-    <h2>About Me</h2>
-    <p><strong>Name:</strong> Tamandani Mujuni</p>
-    <p><strong>Current Role:</strong> Software Engineering Student at XYZ University</p>
-    <p><strong>Education:</strong> BSc in Software Engineering, Makerere University (Year 2)</p>
-    <p><strong>Hobbies:</strong> Coding, Building Projects, Watching Football, and Playing Chess</p>
-  </section>
+    <main class="main-content container">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active">
+            <div class="alert-banner">
+                ⚠️ <strong>Market Alert:</strong> Maize prices in Kenya expected to rise 15% next week due to seasonal demand
+            </div>
+            
+            <h2>Market Overview Dashboard</h2>
+            <div class="dashboard-grid">
+                <div class="card price-card">
+                    <h3>🌽 Maize (Kenya)</h3>
+                    <div class="price-display">$245/ton</div>
+                    <span class="price-change price-up">↗ +12% this week</span>
+                </div>
+                
+                <div class="card price-card">
+                    <h3>🫘 Beans (Uganda)</h3>
+                    <div class="price-display">$890/ton</div>
+                    <span class="price-change price-down">↘ -3% this week</span>
+                </div>
+                
+                <div class="card price-card">
+                    <h3>🍚 Rice (Tanzania)</h3>
+                    <div class="price-display">$520/ton</div>
+                    <span class="price-change price-up">↗ +7% this week</span>
+                </div>
+                
+                <div class="card">
+                    <h3>📊 Market Volatility Index</h3>
+                    <div class="chart-container">
+                        <canvas id="volatilityChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>🌍 Regional Price Comparison</h3>
+                    <div class="chart-container">
+                        <canvas id="regionalChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>📈 Supply & Demand Trends</h3>
+                    <div class="chart-container">
+                        <canvas id="supplyDemandChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-  <!-- Skills Section -->
-  <section id="skills" class="section skills">
-    <h2>Skills</h2>
-    <ul>
-      <li><strong>Programming Languages:</strong> HTML, CSS, Python (beginner)</li>
-      <li><strong>Tools:</strong> VS Code, Git, GitHub</li>
-      <li><strong>Database:</strong> Firebase (basic setup knowledge)</li>
-    </ul>
-  </section>
+        <!-- Price Forecasting Section -->
+        <section id="forecasting" class="section">
+            <h2>AI-Powered Price Forecasting</h2>
+            
+            <div class="forecast-controls">
+                <div class="control-group">
+                    <label>Commodity:</label>
+                    <select id="commoditySelect" onchange="updateForecast()">
+                        <option value="maize">Maize</option>
+                        <option value="beans">Beans</option>
+                        <option value="rice">Rice</option>
+                        <option value="millet">Millet</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label>Region:</label>
+                    <select id="regionSelect" onchange="updateForecast()">
+                        <option value="kenya">Kenya</option>
+                        <option value="uganda">Uganda</option>
+                        <option value="tanzania">Tanzania</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label>Forecast Period:</label>
+                    <select id="periodSelect" onchange="updateForecast()">
+                        <option value="7">7 Days</option>
+                        <option value="30">30 Days</option>
+                        <option value="90">90 Days</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label>&nbsp;</label>
+                    <button class="cta-button" onclick="generateForecast()">Generate Forecast</button>
+                </div>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>📈 Price Forecast</h3>
+                    <div class="chart-container">
+                        <canvas id="forecastChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>🎯 Forecast Accuracy</h3>
+                    <div style="text-align: center; padding: 2rem;">
+                        <div style="font-size: 3rem; color: #27ae60; font-weight: bold;">87%</div>
+                        <p>Average prediction accuracy over last 6 months</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>⚡ Key Factors</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">🌧️ Seasonal rainfall patterns</li>
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">🚛 Transportation costs</li>
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">💱 Currency exchange rates</li>
+                        <li style="padding: 0.5rem 0;">📊 Historical price trends</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
-  <!-- Projects Section -->
-  <section id="projects" class="section projects">
-    <h2>Projects</h2>
-    <div class="project-gallery">
-      <!-- Project 1 -->
-      <div class="project-card">
-        <img src="images/project1.png" alt="Project 1 Screenshot" />
-        <h3>Weather App</h3>
-        <p>Built a weather forecast web app using HTML/CSS and integrated OpenWeather API. Role: Frontend Developer. Tools: HTML, CSS, JavaScript.</p>
-        <a href="#">Read more</a>
-      </div>
-    </div>
-  </section>
+        <!-- Market Analytics Section -->
+        <section id="analytics" class="section">
+            <h2>Market Analytics Dashboard</h2>
+            
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>📊 Seasonal Price Patterns</h3>
+                    <div class="chart-container">
+                        <canvas id="seasonalChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>🌍 Cross-Border Trade Flows</h3>
+                    <div class="chart-container">
+                        <canvas id="tradeFlowChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>📈 Market Efficiency Score</h3>
+                    <div style="text-align: center; padding: 2rem;">
+                        <div style="font-size: 3rem; color: #f39c12; font-weight: bold;">72%</div>
+                        <p>Regional market efficiency index</p>
+                        <small style="color: #666;">Based on price convergence and arbitrage opportunities</small>
+                    </div>
+                </div>
+                    <div class="card-padding">
+                <div class="card">
+                    <h3>🏪 Food Reserve Levels</h3>
+                    <div style="padding: 1rem 0;">
+                        <div style="margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span>Kenya</span><span>78%</span>
+                            </div>
+                            <div style="background: #e0e0e0; height: 10px; border-radius: 5px;">
+                                <div style="background: #27ae60; height: 100%; width: 78%; border-radius: 5px;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span>Uganda</span><span>65%</span>
+                            </div>
+                            <div style="background: #e0e0e0; height: 10px; border-radius: 5px;">
+                                <div style="background: #f39c12; height: 100%; width: 65%; border-radius: 5px;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span>Tanzania</span><span>45%</span>
+                            </div>
+                            <div style="background: #e0e0e0; height: 10px; border-radius: 5px;">
+                                <div style="background: #e74c3c; height: 100%; width: 45%; border-radius: 5px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-  <!-- Contact Me Section -->
-  <section id="contact" class="section contact">
-    <h2>Contact Me</h2>
-    <p>Feel free to reach out. I typically respond within 24 hours.</p>
-    <form action="https://formspree.io/f/yourformid" method="POST">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required />
+        <!-- Trade Optimization Section -->
+        <section id="trade" class="section">
+            <h2>Trade Route Optimization</h2>
+            
+            <div class="card" style="margin-bottom: 2rem;">
+                <h3>🗺️ Optimal Trade Routes</h3>
+                <div class="trade-route">
+                    <div class="route-info">
+                        <strong>Kampala → Nairobi</strong><br>
+                        <small>Maize transport • 450km • Est. 2 days</small>
+                    </div>
+                    <div class="route-efficiency high-efficiency">High Efficiency</div>
+                </div>
+                
+                <div class="trade-route">
+                    <div class="route-info">
+                        <strong>Dar es Salaam → Mombasa</strong><br>
+                        <small>Rice transport • 680km • Est. 3 days</small>
+                    </div>
+                    <div class="route-efficiency medium-efficiency">Medium Efficiency</div>
+                </div>
+                
+                <div class="trade-route">
+                    <div class="route-info">
+                        <strong>Dodoma → Kigali</strong><br>
+                        <small>Beans transport • 520km • Est. 4 days</small>
+                    </div>
+                    <div class="route-efficiency low-efficiency">Low Efficiency</div>
+                </div>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>💰 Arbitrage Opportunities</h3>
+                    <div style="padding: 1rem 0;">
+                        <div style="background: #e8f5e8; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                            <strong>Maize: Uganda → Kenya</strong><br>
+                            <span style="color: #27ae60;">Potential profit: $45/ton</span>
+                        </div>
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                            <strong>Rice: Tanzania → Uganda</strong><br>
+                            <span style="color: #f39c12;">Potential profit: $23/ton</span>
+                        </div>
+                        <div style="background: #f8d7da; padding: 1rem; border-radius: 8px;">
+                            <strong>Beans: Kenya → Tanzania</strong><br>
+                            <span style="color: #e74c3c;">Risk: High transport costs</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>🚧 Trade Barriers</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">🛃 Import tariffs: 5-15%</li>
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">📋 Documentation delays</li>
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">🛣️ Infrastructure bottlenecks</li>
+                        <li style="padding: 0.5rem 0;">💱 Currency fluctuations</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>📱 SMS Alert System</h3>
+                    <div style="padding: 1rem 0;">
+                        <p style="margin-bottom: 1rem;">Get real-time price alerts via SMS</p>
+                        <input type="tel" placeholder="Enter phone number" style="width: 100%; margin-bottom: 1rem;">
+                        <button class="cta-button" style="width: 100%;">Subscribe to Alerts</button>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required />
+        <!-- About Section -->
+        <section id="about" class="section">
+            <h2>About AgriPrice Sense</h2>
+            
+            <div style="margin-bottom: 3rem;">
+                <h3 style="color: #2c5530; margin-bottom: 1rem;">Our Mission</h3>
+                <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem;">
+                    AgriPrice Sense provides smart, data-driven insights on agricultural pricing, market transparency, 
+                    and fair trade to empower small-scale farmers and stabilize food commodity markets, reducing price 
+                    volatility and enhancing food security in Sub-Saharan Africa and the Global South.
+                </p>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>SDG 2 Target 2.8</h3>
+                    <p>Enable proper functioning of food commodity markets and facilitate timely access to market information</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Price Stability</h3>
+                    <p>Limit extreme food price volatility through accurate forecasting and market analytics</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">👩‍🌾</div>
+                    <h3>Farmer Empowerment</h3>
+                    <p>Double productivity and incomes of small-scale producers, especially women and marginalized groups</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🌱</div>
+                    <h3>Sustainable Agriculture</h3>
+                    <p>Promote sustainable food production and resilient agricultural practices</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🤝</div>
+                    <h3>Fair Trade</h3>
+                    <p>Prevent trade restrictions, market distortions, and unfair export subsidies</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile Access</h3>
+                    <p>Accessible via smartphones with offline capabilities and SMS alerts for limited connectivity</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 3rem; text-align: center;">
+                <h3 style="color: #2c5530; margin-bottom: 1rem;">Our Partners</h3>
+                <p>Working with FAO, African Union, and governments of Uganda, Kenya, and Tanzania</p>
+            </div>
+        </section>
+    </main>
 
-      <label for="message">Message:</label>
-      <textarea id="message" name="message" required></textarea>
+    <script>
+        // Navigation functionality
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update navigation
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => link.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Initialize charts for the active section
+            setTimeout(() => initializeCharts(sectionId), 100);
+        }
 
-      <button type="submit">Send Message</button>
-    </form>
-    <p>Email: tamandani@email.com</p>
-    <p>Location: Kampala, Uganda</p>
-  </section>
+        // Chart initialization
+        function initializeCharts(sectionId) {
+            if (sectionId === 'dashboard') {
+                initDashboardCharts();
+            } else if (sectionId === 'forecasting') {
+                initForecastCharts();
+            } else if (sectionId === 'analytics') {
+                initAnalyticsCharts();
+            }
+        }
 
-  <!-- JS for animations or interactivity (optional) -->
-  <script src="script.js"></script>
-</body>
+        function initDashboardCharts() {
+            // Volatility Chart
+            const volatilityCtx = document.getElementById('volatilityChart');
+            if (volatilityCtx) {
+                new Chart(volatilityCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'Volatility Index',
+                            data: [65, 59, 80, 81, 56, 55],
+                            borderColor: '#e74c3c',
+                            backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }
+
+            // Regional Chart
+            const regionalCtx = document.getElementById('regionalChart');
+            if (regionalCtx) {
+                new Chart(regionalCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Kenya', 'Uganda', 'Tanzania'],
+                        datasets: [{
+                            label: 'Maize Price ($/ton)',
+                            data: [245, 220, 235],
+                            backgroundColor: ['#2c5530', '#4a7c59', '#68a085']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }
+
+            // Supply Demand Chart
+            const supplyDemandCtx = document.getElementById('supplyDemandChart');
+            if (supplyDemandCtx) {
+                new Chart(supplyDemandCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Supply', 'Demand'],
+                        datasets: [{
+                            data: [45, 55],
+                            backgroundColor: ['#27ae60', '#e74c3c']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+        }
+
+        function initForecastCharts() {
+            const forecastCtx = document.getElementById('forecastChart');
+            if (forecastCtx) {
+                new Chart(forecastCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Today', '+7d', '+14d', '+21d', '+30d'],
+                        datasets: [{
+                            label: 'Historical',
+                            data: [245, 250, 248, 252, null],
+                            borderColor: '#2c5530',
+                            backgroundColor: 'rgba(44, 85, 48, 0.1)'
+                        }, {
+                            label: 'Forecast',
+                            data: [null, null, null, 252, 258],
+                            borderColor: '#f39c12',
+                            backgroundColor: 'rgba(243, 156, 18, 0.1)',
+                            borderDash: [5, 5]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+        }
+
+        function initAnalyticsCharts() {
+            // Seasonal Chart
+            const seasonalCtx = document.getElementById('seasonalChart');
+            if (seasonalCtx) {
+                new Chart(seasonalCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        datasets: [{
+                            label: 'Average Price',
+                            data: [220, 225, 240, 260, 280, 290, 285, 275, 265, 250, 235, 225],
+                            borderColor: '#2c5530',
+                            backgroundColor: 'rgba(44, 85, 48, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }
+
+            // Trade Flow Chart
+            const tradeFlowCtx = document.getElementById('tradeFlowChart');
+            if (tradeFlowCtx) {
+                new Chart(tradeFlowCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Kenya→Uganda', 'Uganda→Kenya', 'Tanzania→Kenya', 'Kenya→Tanzania', 'Uganda→Tanzania', 'Tanzania→Uganda'],
+                        datasets: [{
+                            label: 'Trade Volume',
+                            data: [65, 45, 80, 35, 55, 70],
+                            borderColor: '#4a7c59',
+                            backgroundColor: 'rgba(74, 124, 89, 0.2)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+        }
+
+        // Forecast functionality
+        function updateForecast() {
+            const commodity = document.getElementById('commoditySelect').value;
+            const region = document.getElementById('regionSelect').value;
+            const period = document.getElementById('periodSelect').value;
+            
+            // Update forecast display based on selections
+            console.log(`Updating forecast for ${commodity} in ${region} for ${period} days`);
+        }
+
+        function generateForecast() {
+            // Simulate forecast generation
+            const button = event.target;
+            const originalText = button.textContent;
+            
+            button.textContent = 'Generating...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.disabled = false;
+                alert('Forecast generated successfully! Check the chart above for updated predictions.');
+            }, 2000);
+        }
+
+        // Initialize dashboard on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts('dashboard');
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'979f5a75a10873e9',t:'MTc1NzAwODQ3OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
-
-<!--
-======================
-Deployment Instructions
-======================
-
-1. GITHUB PAGES
------------------
-1. Create a GitHub repository
-2. Push your files to the repository (index.html, style.css, etc.)
-3. Go to Settings > Pages
-4. Choose Branch: "main", folder: "/root" or "/docs"
-5. Click "Save"
-6. GitHub will give you a public URL like https://username.github.io/repo-name
-
-2. NETLIFY
-----------
-1. Create a Netlify account
-2. Click "Add new site" > "Import an existing project"
-3. Connect to your GitHub and select the portfolio repository
-4. Set build command: (leave blank) and publish directory: "./"
-5. Click "Deploy Site"
-6. Netlify will give you a public link
-
-3. VERCEL
----------
-1. Create a Vercel account
-2. Click "Add New Project"
-3. Connect GitHub and import your repository
-4. Select root directory and skip build settings (for static site)
-5. Click "Deploy"
-6. Vercel gives you a public URL
-
-4. RENDER
----------
-1. Create a Render account
-2. Go to Dashboard > "New Static Site"
-3. Connect GitHub and choose your repo
-4. Set build command: (leave blank), and publish directory: "./"
-5. Click "Create Static Site"
-6. Render provides a public URL
--->
