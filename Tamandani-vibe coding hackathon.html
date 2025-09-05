@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -193,6 +194,7 @@
             display: flex;
             flex-direction: column;
             gap: 5px;
+            min-width: 150px;
         }
 
         .control-group label {
@@ -267,32 +269,6 @@
             display: none;
         }
 
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .mobile-menu {
-                display: block;
-                background: none;
-                border: none;
-                font-size: 1.5rem;
-                cursor: pointer;
-            }
-            
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .forecast-controls {
-                flex-direction: column;
-            }
-        }
-
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -316,8 +292,83 @@
             font-size: 3rem;
             margin-bottom: 1rem;
         }
-        .card-padding {
-            padding: 1rem 0;
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.high {
+            background: #27ae60;
+        }
+
+        .progress-fill.medium {
+            background: #f39c12;
+        }
+
+        .progress-fill.low {
+            background: #e74c3c;
+        }
+
+        .progress-item {
+            margin-bottom: 1rem;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+            
+            .nav-links.show {
+                display: flex;
+            }
+            
+            .mobile-menu {
+                display: block;
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .forecast-controls {
+                flex-direction: column;
+            }
+
+            .control-group {
+                min-width: auto;
+            }
         }
     </style>
 </head>
@@ -327,14 +378,14 @@
             <div class="logo">
                 🌾 AgriPrice Sense
             </div>
-            <ul class="nav-links">
+            <ul class="nav-links" id="navLinks">
                 <li><a href="#" onclick="showSection('dashboard')" class="active">Dashboard</a></li>
                 <li><a href="#" onclick="showSection('forecasting')">Price Forecasting</a></li>
                 <li><a href="#" onclick="showSection('analytics')">Market Analytics</a></li>
                 <li><a href="#" onclick="showSection('trade')">Trade Optimization</a></li>
                 <li><a href="#" onclick="showSection('about')">About</a></li>
             </ul>
-            <button class="mobile-menu">☰</button>
+            <button class="mobile-menu" onclick="toggleMobileMenu()">☰</button>
         </nav>
     </header>
 
@@ -490,32 +541,32 @@
                         <small style="color: #666;">Based on price convergence and arbitrage opportunities</small>
                     </div>
                 </div>
-                    <div class="card-padding">
+                
                 <div class="card">
                     <h3>🏪 Food Reserve Levels</h3>
                     <div style="padding: 1rem 0;">
-                        <div style="margin-bottom: 1rem;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <div class="progress-item">
+                            <div class="progress-label">
                                 <span>Kenya</span><span>78%</span>
                             </div>
-                            <div style="background: #e0e0e0; height: 10px; border-radius: 5px;">
-                                <div style="background: #27ae60; height: 100%; width: 78%; border-radius: 5px;"></div>
+                            <div class="progress-bar">
+                                <div class="progress-fill high" style="width: 78%;"></div>
                             </div>
                         </div>
-                        <div style="margin-bottom: 1rem;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <div class="progress-item">
+                            <div class="progress-label">
                                 <span>Uganda</span><span>65%</span>
                             </div>
-                            <div style="background: #e0e0e0; height: 10px; border-radius: 5px;">
-                                <div style="background: #f39c12; height: 100%; width: 65%; border-radius: 5px;"></div>
+                            <div class="progress-bar">
+                                <div class="progress-fill medium" style="width: 65%;"></div>
                             </div>
                         </div>
-                        <div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <div class="progress-item">
+                            <div class="progress-label">
                                 <span>Tanzania</span><span>45%</span>
                             </div>
-                            <div style="background: #e0e0e0; height: 10px; border-radius: 5px;">
-                                <div style="background: #e74c3c; height: 100%; width: 45%; border-radius: 5px;"></div>
+                            <div class="progress-bar">
+                                <div class="progress-fill low" style="width: 45%;"></div>
                             </div>
                         </div>
                     </div>
@@ -587,8 +638,8 @@
                     <h3>📱 SMS Alert System</h3>
                     <div style="padding: 1rem 0;">
                         <p style="margin-bottom: 1rem;">Get real-time price alerts via SMS</p>
-                        <input type="tel" placeholder="Enter phone number" style="width: 100%; margin-bottom: 1rem;">
-                        <button class="cta-button" style="width: 100%;">Subscribe to Alerts</button>
+                        <input type="tel" id="phoneNumber" placeholder="Enter phone number" style="width: 100%; margin-bottom: 1rem;">
+                        <button class="cta-button" style="width: 100%;" onclick="subscribeToAlerts()">Subscribe to Alerts</button>
                     </div>
                 </div>
             </div>
@@ -653,25 +704,33 @@
     </main>
 
     <script>
-        // Navigation functionality
+        let chartInstances = {};
+
         function showSection(sectionId) {
-            // Hide all sections
             const sections = document.querySelectorAll('.section');
             sections.forEach(section => section.classList.remove('active'));
             
-            // Show selected section
             document.getElementById(sectionId).classList.add('active');
             
-            // Update navigation
             const navLinks = document.querySelectorAll('.nav-links a');
             navLinks.forEach(link => link.classList.remove('active'));
-            event.target.classList.add('active');
             
-            // Initialize charts for the active section
+            const clickedLink = document.querySelector(`[onclick="showSection('${sectionId}')"]`);
+            if (clickedLink) {
+                clickedLink.classList.add('active');
+            }
+            
+            const navLinksContainer = document.getElementById('navLinks');
+            navLinksContainer.classList.remove('show');
+            
             setTimeout(() => initializeCharts(sectionId), 100);
         }
 
-        // Chart initialization
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('show');
+        }
+
         function initializeCharts(sectionId) {
             if (sectionId === 'dashboard') {
                 initDashboardCharts();
@@ -682,11 +741,18 @@
             }
         }
 
+        function destroyChart(chartId) {
+            if (chartInstances[chartId]) {
+                chartInstances[chartId].destroy();
+                delete chartInstances[chartId];
+            }
+        }
+
         function initDashboardCharts() {
-            // Volatility Chart
             const volatilityCtx = document.getElementById('volatilityChart');
             if (volatilityCtx) {
-                new Chart(volatilityCtx, {
+                destroyChart('volatilityChart');
+                chartInstances['volatilityChart'] = new Chart(volatilityCtx, {
                     type: 'line',
                     data: {
                         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -706,10 +772,10 @@
                 });
             }
 
-            // Regional Chart
             const regionalCtx = document.getElementById('regionalChart');
             if (regionalCtx) {
-                new Chart(regionalCtx, {
+                destroyChart('regionalChart');
+                chartInstances['regionalChart'] = new Chart(regionalCtx, {
                     type: 'bar',
                     data: {
                         labels: ['Kenya', 'Uganda', 'Tanzania'],
@@ -727,10 +793,10 @@
                 });
             }
 
-            // Supply Demand Chart
             const supplyDemandCtx = document.getElementById('supplyDemandChart');
             if (supplyDemandCtx) {
-                new Chart(supplyDemandCtx, {
+                destroyChart('supplyDemandChart');
+                chartInstances['supplyDemandChart'] = new Chart(supplyDemandCtx, {
                     type: 'doughnut',
                     data: {
                         labels: ['Supply', 'Demand'],
@@ -750,7 +816,8 @@
         function initForecastCharts() {
             const forecastCtx = document.getElementById('forecastChart');
             if (forecastCtx) {
-                new Chart(forecastCtx, {
+                destroyChart('forecastChart');
+                chartInstances['forecastChart'] = new Chart(forecastCtx, {
                     type: 'line',
                     data: {
                         labels: ['Today', '+7d', '+14d', '+21d', '+30d'],
@@ -776,10 +843,10 @@
         }
 
         function initAnalyticsCharts() {
-            // Seasonal Chart
             const seasonalCtx = document.getElementById('seasonalChart');
             if (seasonalCtx) {
-                new Chart(seasonalCtx, {
+                destroyChart('seasonalChart');
+                chartInstances['seasonalChart'] = new Chart(seasonalCtx, {
                     type: 'line',
                     data: {
                         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -799,10 +866,10 @@
                 });
             }
 
-            // Trade Flow Chart
             const tradeFlowCtx = document.getElementById('tradeFlowChart');
             if (tradeFlowCtx) {
-                new Chart(tradeFlowCtx, {
+                destroyChart('tradeFlowChart');
+                chartInstances['tradeFlowChart'] = new Chart(tradeFlowCtx, {
                     type: 'radar',
                     data: {
                         labels: ['Kenya→Uganda', 'Uganda→Kenya', 'Tanzania→Kenya', 'Kenya→Tanzania', 'Uganda→Tanzania', 'Tanzania→Uganda'],
@@ -821,18 +888,22 @@
             }
         }
 
-        // Forecast functionality
         function updateForecast() {
             const commodity = document.getElementById('commoditySelect').value;
             const region = document.getElementById('regionSelect').value;
             const period = document.getElementById('periodSelect').value;
             
-            // Update forecast display based on selections
-            console.log(`Updating forecast for ${commodity} in ${region} for ${period} days`);
+            if (chartInstances['forecastChart']) {
+                const basePrice = commodity === 'maize' ? 245 : commodity === 'beans' ? 890 : 520;
+                const variation = Math.random() * 20 - 10;
+                
+                chartInstances['forecastChart'].data.datasets[0].data = [basePrice, basePrice + 5, basePrice + 3, basePrice + 7, null];
+                chartInstances['forecastChart'].data.datasets[1].data = [null, null, null, basePrice + 7, basePrice + variation];
+                chartInstances['forecastChart'].update();
+            }
         }
 
         function generateForecast() {
-            // Simulate forecast generation
             const button = event.target;
             const originalText = button.textContent;
             
@@ -843,13 +914,32 @@
                 button.textContent = originalText;
                 button.disabled = false;
                 alert('Forecast generated successfully! Check the chart above for updated predictions.');
+                updateForecast();
             }, 2000);
         }
 
-        // Initialize dashboard on page load
+        function subscribeToAlerts() {
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            if (phoneNumber) {
+                alert(`Thank you! SMS alerts will be sent to ${phoneNumber}`);
+                document.getElementById('phoneNumber').value = '';
+            } else {
+                alert('Please enter a valid phone number.');
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             initializeCharts('dashboard');
         });
+
+        document.addEventListener('click', function(event) {
+            const navLinks = document.getElementById('navLinks');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            
+            if (!navLinks.contains(event.target) && !mobileMenu.contains(event.target)) {
+                navLinks.classList.remove('show');
+            }
+        });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'979f5a75a10873e9',t:'MTc1NzAwODQ3OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
